@@ -66,7 +66,7 @@ C_Meter = 0
 score = 0
 meterScore = []
 Meters = font.render(f'Meters: {C_Meter}', True, (0, 0, 0))
-
+Stuff = font.render("Press the Button", True, (0,0,0))
 #Bullet Variables
 bx = 1500
 by = y
@@ -107,6 +107,7 @@ Block6 = random.choice(blockType)
 Block7 = random.choice(blockType)
 Blocks = [Block1, Block2, Block3, Block4, Block5, Block6]
 lastBlock = "Block1"
+resetting = False
 
 #Collision Detection
 C_Mask = pygame.mask.from_surface(Standing)
@@ -120,10 +121,38 @@ Block6_mask = pygame.mask.from_surface(Block6)
 Block7_mask = pygame.mask.from_surface(Block7)
 
 #Enemy for 100m
-enemyX = [0, 0, 0, 0]
-enemyY = [0, 0, 0, 0]
-Blocky = [Block1y, Block2y, Block3y, Block4y, Block5y, Block6y, Block7y]
-Blockx = [Block1x, Block2x, Block3x, Block4x, Block5x, Block6x, Block7x]
+Enemy1 = True
+Enemy2 = False
+Enemy3 = False
+Enemy4 = False
+enemy1x = 0
+enemy1y = 0
+enemy2x = 0
+enemy2y = 0
+enemy3x = 0
+enemy3y = 0
+enemy4x = 0
+enemy4y = 0
+enemies = [Enemy1, Enemy2, Enemy3, Enemy4]
+EnemyX = {
+    Enemy1 : enemy1x,
+    Enemy2 : enemy2x,
+    Enemy3 : enemy3x,
+    Enemy4 : enemy4x
+}
+EnemyY = {
+    Enemy1 : enemy1y,
+    Enemy2 : enemy2y,
+    Enemy3 : enemy3y,
+    Enemy4 : enemy4y
+}
+idle1 = True
+idle2 = True
+idle3 = True
+idle4 = True
+ENEMY1 = Enemy_S
+enemy_mask = pygame.mask.from_surface(ENEMY1)
+Evel = 2
 
 #Testing section
 respawn = False
@@ -187,8 +216,9 @@ while True:
         display.fill((74, 174, 240))
         #Block positioning and creation
         if lastBlock == 'Block1':
-            if Block2y > 800 or not scroll:
+            if Block2y > 850 or not scroll or resetting:
                 lastBlock = "Block2"
+                Block2 = random.choice(blockType)
                 BLOCK = random.choice(blockSide)
                 if BLOCK == 'left' and Block1x < 100:
                     BLOCK = 'right'
@@ -202,9 +232,15 @@ while True:
                     Block2y = random.randint(Block1y - 180, Block1y - 140)
                 if Block2x < 0 or Block2x + Block_width.get(Block2) > 1495:
                     lastBlock = 'Block1'
-        elif lastBlock == 'Block2':
-            if not scroll or Block3y > 800:
+                    print("hi")
+                    resetting = True
+                else:
+                    lastBlock = 'Block2'
+                    resetting = False
+        elif lastBlock == 'Block2': 
+            if not scroll or Block3y > 850 or resetting:
                 lastBlock = "Block3"
+                Block3 = random.choice(blockType)
                 if BLOCK == 'left' and Block2x < 100:
                     BLOCK = 'right'
                 elif BLOCK == 'right' and Block2x + Block_width.get(Block2) > 1375:
@@ -216,9 +252,17 @@ while True:
                 elif BLOCK == 'right':
                     Block3x = random.randint(Block2x + 100 + Block_width.get(Block2), Block2x + 170 + Block_width.get(Block2))
                     Block3y = random.randint(Block2y - 180, Block2y - 140)
+                if Block3x < 0 or Block3x + Block_width.get(Block3) > 1495:
+                    lastBlock = 'Block2'
+                    print("hi")
+                    resetting = True
+                else:
+                    lastBlock = 'Block3'
+                    resetting = False
         elif lastBlock == 'Block3':
-            if not scroll or Block4y > 800:
+            if not scroll or Block4y > 850 or resetting:
                 lastBlock = "Block4"
+                Block4 = random.choice(blockType)
                 BLOCK = random.choice(blockSide)
                 if BLOCK == 'left' and Block3x < 100:
                     BLOCK = 'right'
@@ -231,9 +275,17 @@ while True:
                 elif BLOCK == 'right':
                     Block4x = random.randint(Block3x + 100 + Block_width.get(Block3), Block3x + 170 + Block_width.get(Block3))
                     Block4y = random.randint(Block3y - 180, Block3y - 140)
+                if Block4x < 0 or Block4x + Block_width.get(Block4) > 1495:
+                    lastBlock = 'Block3'
+                    print("hi")
+                    resetting = True
+                else:
+                    lastBlock = 'Block4'
+                    resetting = False
         elif lastBlock == 'Block4':
-            if not scroll or Block5y > 800:
+            if not scroll or Block5y > 850 or resetting:
                 lastBlock = "Block5"
+                Block5 = random.choice(blockType)
                 BLOCK = random.choice(blockSide)
                 if BLOCK == 'left' and Block4x < 100:
                     BLOCK = 'right'
@@ -246,9 +298,17 @@ while True:
                 elif BLOCK == 'right':
                     Block5x = random.randint(Block4x + 100 + Block_width.get(Block4), Block4x + 170 + Block_width.get(Block4))
                     Block5y = random.randint(Block4y - 180, Block4y - 140)
+                if Block5x < 0 or Block5x + Block_width.get(Block5) > 1495:
+                    lastBlock = 'Block4'
+                    print("hi")
+                    resetting = True
+                else:
+                    lastBlock = 'Block5'
+                    resetting = False
         elif lastBlock == 'Block5':
-            if not scroll or Block6y > 800:
+            if not scroll or Block6y > 850 or resetting:
                 lastBlock = "Block6"
+                Block6 = random.choice(blockType)
                 BLOCK = random.choice(blockSide)
                 if BLOCK == 'left' and Block5x < 100:
                     BLOCK = 'right'
@@ -261,9 +321,17 @@ while True:
                 elif BLOCK == 'right':
                     Block6x = random.randint(Block5x + 100 + Block_width.get(Block5), Block5x + 170 + Block_width.get(Block5))
                     Block6y = random.randint(Block5y - 180, Block5y - 140)
+                if Block6x < 0 or Block6x + Block_width.get(Block6) > 1495:
+                    lastBlock = 'Block5'
+                    print("hi")
+                    resetting = True
+                else:
+                    lastBlock = 'Block6'
+                    resetting = False
         elif lastBlock == 'Block6':
-            if not scroll or Block7y > 800:
+            if not scroll or Block7y > 850 or resetting:
                 lastBlock = "Block7"
+                Block7 = random.choice(blockType)
                 BLOCK = random.choice(blockSide)
                 if BLOCK == 'left' and Block6x < 100:
                     BLOCK = 'right'
@@ -276,23 +344,68 @@ while True:
                 elif BLOCK == 'right':
                     Block7x = random.randint(Block6x + 100 + Block_width.get(Block6), Block6x + 170 + Block_width.get(Block6))
                     Block7y = random.randint(Block6y - 180, Block6y - 140)
+                if Block7x < 0 or Block7x + Block_width.get(Block7) > 1495:
+                    lastBlock = 'Block6'
+                    print("hi")
+                    resetting = True
+                else:
+                    lastBlock = 'Block7'
+                    resetting = False
         
         elif lastBlock == 'Block7':
-            if Block1y > 800:
+            if Block1y > 850 or resetting:
                 lastBlock = "Block1"
+                Block1 = random.choice(blockType)
                 BLOCK = random.choice(blockSide)
                 if BLOCK == 'left' and Block7x < 100:
                     BLOCK = 'right'
                 elif BLOCK == 'right' and Block7x + Block_width.get(Block7) > 1375 :
                     BLOCK = 'left'
                 if BLOCK == 'left':
-                    Block1x = random.randint(Block7x - 170 - Block_width.get(Block1), Block7x - 100 - Block_width.get(Block1))
+                    Block1x = random.randint(Block7x - 150 - Block_width.get(Block1), Block7x - 100 - Block_width.get(Block1))
                     Block1y = random.randint(Block7y - 180, Block7y - 140)
 
                 elif BLOCK == 'right':
                     Block1x = random.randint(Block7x + 100 + Block_width.get(Block7), Block7x + 170 + Block_width.get(Block7))
                     Block1y = random.randint(Block7y - 180, Block7y - 140)
+                if Block1x < 0 or Block1x + Block_width.get(Block1) > 1495:
+                    lastBlock = 'Block7'
+                    print("hi")
+                    resetting = True
+                else:
+                    lastBlock = 'Block1'
+                    resetting = False
+        
+        Block1_mask = pygame.mask.from_surface(Block1)
+        Block2_mask = pygame.mask.from_surface(Block2)
+        Block3_mask = pygame.mask.from_surface(Block3)
+        Block4_mask = pygame.mask.from_surface(Block4)
+        Block5_mask = pygame.mask.from_surface(Block5)
+        Block6_mask = pygame.mask.from_surface(Block6)
+        Block7_mask = pygame.mask.from_surface(Block7)
 
+        #enemy positioning
+        for i in enemies:
+            if i:
+                enemy1x = Block1x + (Block_width.get(Block1)//2) - 20
+                if idle1:
+                    enemy1y = Block1y - 40
+                    ENEMY1 = Enemy_S
+                else:
+                    enemy1y = Block1y - 54
+                    ENEMY1 = Enemy_ML
+                    enemy1x -= Evel
+                    if enemy1x < Block1x:
+                        enemy1x = Block1x
+            else:
+                if not Enemy1:
+                    enemy1x = -40
+                    enemy1y = 802
+        
+        if Bullet_mask.overlap(enemy_mask, (enemy1x - bx, enemy1y - by)):
+            Enemy1 = False
+        if Block1y < 0 and not Enemy1:
+            Enemy1 = True
         
         #player movement 
         if keys[pygame.K_LEFT] or keys[pygame.K_a]:
@@ -307,6 +420,9 @@ while True:
                     val = 0
                 Character = Walking_Left[val//5]
                 val += 1
+                if enemy_mask.overlap(C_Mask, (x - enemy1x, y - enemy1y)):
+                    hp_level -= 5
+                    x += 10
         
         if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
             if x > 1445:
@@ -320,6 +436,9 @@ while True:
                     val = 0
                 Character = Walking_Right[val//5]
                 val += 1
+                if enemy_mask.overlap(C_Mask, (x - enemy1x, y - enemy1y)):
+                    hp_level -= 5
+                    x -= 7
         
         if jump:
             
@@ -363,6 +482,10 @@ while True:
         
         elif scroll and y >= 683:
             jump = False
+            if LeftorRight:
+                    Character = L_Standing
+            else:
+                Character = R_Standing
             if Floory > 760:
                 Floory -= vel * 3
                 Block1y -= vel * 3
@@ -404,7 +527,8 @@ while True:
                     y = Block1y + 50
                     jumpCount = -11
                 if y - 20 < Block1y:
-                    y = Block1y - height - 2
+                    idle1 = False
+                    y = Block1y - height
         
         elif C_Mask.overlap(Block2_mask, (Block2x - x, Block2y - y)):
             if x + width > Block2x and x < Block2x + Block_width.get(Block2):
@@ -412,7 +536,8 @@ while True:
                     y = Block2y + 50
                     jumpCount = -11
                 if y - 20 < Block2y:
-                    y = Block2y - height - 2
+                    idle1 = True
+                    y = Block2y - height
 
         elif C_Mask.overlap(Block3_mask, (Block3x - x, Block3y - y)):
             if x + width > Block3x and x < Block3x + Block_width.get(Block3):
@@ -420,7 +545,7 @@ while True:
                     y = Block3y + 50
                     jumpCount = -11
                 if y - 20 < Block3y:
-                    y = Block3y - height - 2
+                    y = Block3y - height
         
         elif C_Mask.overlap(Block4_mask, (Block4x - x, Block4y - y)):
             if x + width > Block4x and x < Block4x + Block_width.get(Block4):
@@ -428,7 +553,7 @@ while True:
                     y = Block4y + 50
                     jumpCount = -11
                 if y - 20 < Block4y:
-                    y = Block4y - height - 2
+                    y = Block4y - height
 
         elif C_Mask.overlap(Block5_mask, (Block5x - x, Block5y - y)):
             if x + width > Block5x and x < Block5x + Block_width.get(Block5):
@@ -436,7 +561,7 @@ while True:
                     y = Block5y + 50
                     jumpCount = -11
                 if y - 20 < Block5y:
-                    y = Block5y - height - 2
+                    y = Block5y - height
         
         elif C_Mask.overlap(Block6_mask, (Block6x - x, Block6y - y)):
             if x + width > Block6x and x < Block6x + Block_width.get(Block6):
@@ -444,7 +569,7 @@ while True:
                     y = Block6y + 50
                     jumpCount = -11
                 if y - 20 < Block6y:
-                    y = Block6y - height - 2
+                    y = Block6y - height
 
         elif C_Mask.overlap(Block7_mask, (Block7x - x, Block7y - y)):
             if x + width > Block7x and x < Block7x + Block_width.get(Block7):
@@ -452,7 +577,8 @@ while True:
                     y = Block7y + 50
                     jumpCount = -11
                 if y - 20 < Block7y:
-                    y = Block7y - height - 2
+                    idle1 = True
+                    y = Block7y - height
         
         
         #Bullet shooting and position
@@ -485,7 +611,8 @@ while True:
 
         #HpBar testing and practice    
         if keys[pygame.K_u]:
-            hp_level -= 1
+            if keys[pygame.K_LSHIFT]:
+                hp_level = 100
         
         if hp_level <= 0:
             display.blit(GameOver, (600, 400))
@@ -508,9 +635,10 @@ while True:
             realy = 700 + (Floory - 760) + (700 - y)
         C_Meter = round(realy/100)
         Meters = font.render(f'Meters: {C_Meter}', True, (0, 0, 0))
+        Blah = font.render(f"idle1 = {idle1}", True, (200,0,0))
 
         if pygame.mouse.get_pressed()[1] == True:
-            print(f"{Block1x, Block1y} \n{Block2x, Block2y} \n{Block3x, Block3y} \n{Block4x, Block4y} \n{Block5x, Block5y} \n{Block6x, Block6y} \n")
+            Stuff = font.render(f"{Block1x, Block1y} \n{Block2x, Block2y} \n{Block3x, Block3y} \n{Block4x, Block4y} \n{Block5x, Block5y} \n{Block6x, Block6y} \n", True, (0,0,0))
 
         pygame.time.delay(sleeptime)
         display.blit(Bullet, (bx, by))
@@ -523,17 +651,15 @@ while True:
         display.blit(Block5, (Block5x, Block5y))
         display.blit(Block6, (Block6x, Block6y))
         display.blit(Block7, (Block7x, Block7y))
-        #display.blit(Enemy_S, (enemyX, enemyY))
-        #display.blit(Enemy_MR, (Block3x + 30, Block3y - 40))
-        #display.blit(Enemy_ML, (Block1x + 30, Block1y - 40))
-        #display.blit(Enemy_WR, (Block4x + 30, Block4y - 40))
-        #display.blit(Enemy_WL, (Block2x + 30, Block2y - 40))
+        display.blit(Stuff, (800, 500))
         display.blit(b1, (Block1x, Block1y))
         display.blit(b2, (Block2x, Block2y))
         display.blit(b3, (Block3x, Block3y))
         display.blit(b4, (Block4x, Block4y))
         display.blit(b5, (Block5x, Block5y))
         display.blit(b6, (Block6x, Block6y))
+        display.blit(ENEMY1, (enemy1x, enemy1y))
+        display.blit(Blah, (enemy1x, enemy1y - 30))
         display.blit(Floor, (1240, Floory))
         display.blit(Floor, (620, Floory))
         display.blit(Floor, (0, Floory))
