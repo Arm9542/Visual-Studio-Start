@@ -186,6 +186,7 @@ while True:
             y = 690
             Floory = 760
             scroll = False
+            idle1 = True
         elif pos[0] > 800 and pos[0] < 925 and pos[1] > 360 and pos[1] < 440:
             pygame.quit()
             sys.exit()
@@ -383,29 +384,9 @@ while True:
         Block5_mask = pygame.mask.from_surface(Block5)
         Block6_mask = pygame.mask.from_surface(Block6)
         Block7_mask = pygame.mask.from_surface(Block7)
-
-        #enemy positioning
-        for i in enemies:
-            if i:
-                enemy1x = Block1x + (Block_width.get(Block1)//2) - 20
-                if idle1:
-                    enemy1y = Block1y - 40
-                    ENEMY1 = Enemy_S
-                else:
-                    enemy1y = Block1y - 54
-                    ENEMY1 = Enemy_ML
-                    enemy1x -= Evel
-                    if enemy1x < Block1x:
-                        enemy1x = Block1x
-            else:
-                if not Enemy1:
-                    enemy1x = -40
-                    enemy1y = 802
         
-        if Bullet_mask.overlap(enemy_mask, (enemy1x - bx, enemy1y - by)):
-            Enemy1 = False
-        if Block1y < 0 and not Enemy1:
-            Enemy1 = True
+        
+        
         
         #player movement 
         if keys[pygame.K_LEFT] or keys[pygame.K_a]:
@@ -420,9 +401,9 @@ while True:
                     val = 0
                 Character = Walking_Left[val//5]
                 val += 1
-                if enemy_mask.overlap(C_Mask, (x - enemy1x, y - enemy1y)):
-                    hp_level -= 5
-                    x += 10
+        if enemy_mask.overlap(C_Mask, (x - enemy1x, y - enemy1y)) and LeftorRight:
+            hp_level -= 5
+            x += 10
         
         if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
             if x > 1445:
@@ -436,9 +417,9 @@ while True:
                     val = 0
                 Character = Walking_Right[val//5]
                 val += 1
-                if enemy_mask.overlap(C_Mask, (x - enemy1x, y - enemy1y)):
-                    hp_level -= 5
-                    x -= 7
+        if enemy_mask.overlap(C_Mask, (x - enemy1x, y - enemy1y)) and not LeftorRight:
+            hp_level -= 5
+            x -= 7
         
         if jump:
             
@@ -468,6 +449,32 @@ while True:
             y = 700
             realy = 0
 
+        #enemy positioing 
+            
+        if Enemy1:
+            if idle1:
+                enemy1y = Block1y - 40
+                ENEMY1 = Enemy_S
+                enemy1x = Block1x + (Block_width.get(Block1)//2) - 20
+            else:
+                enemy1y = Block1y - 54
+                ENEMY1 = Enemy_ML
+                enemy1x -= Evel
+                if enemy1x <= Block1x and Evel > 0:
+                    Evel = -abs(Evel)
+                elif enemy1x + 40 >= Block1x + Block_width.get(Block1) and Evel < 0:
+                    Evel = abs(Evel)
+        else:
+            if not Enemy1:
+                enemy1x = -40
+                enemy1y = 802
+
+        if Bullet_mask.overlap(enemy_mask, (enemy1x - bx, enemy1y - by)):
+            Enemy1 = False
+            print("hello")
+        elif Block1y < 0 and not Enemy1:
+            Enemy1 = True
+
         #Camera rolling 
         if y <= 225:
             scroll = True
@@ -495,6 +502,7 @@ while True:
                 Block5y -= vel * 3
                 Block6y -= vel*3
                 Block7y -= vel*3
+                by -= vel*3
             else:
                 scroll = False
 
@@ -616,7 +624,7 @@ while True:
         
         if hp_level <= 0:
             display.blit(GameOver, (600, 400))
-            meterScore.append(score)
+            meterScore.append(C_Meter)
             Starting = True
             print(meterScore)
             
